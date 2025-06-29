@@ -15,12 +15,18 @@ if 'vehicle_type' not in st.session_state:
 
 @st.cache_data
 def load_showroom_data():
-    df = pd.read_csv("showrooms1.csv", sep=",", quotechar='"', engine='python', on_bad_lines='skip')
-    df.columns = df.columns.str.strip().str.replace('\n', '').str.replace('\r', '').str.replace('"', '')
-    return df
+    try:
+        # Load the showroom data file from the same directory
+        df = pd.read_csv("showrooms1.csv", sep=",", quotechar='"', engine='python', on_bad_lines='skip')
+        df.columns = df.columns.str.strip().str.replace('\n', '').str.replace('\r', '').str.replace('"', '')
+        return df
+    except FileNotFoundError:
+        st.error("⚠️ 'showrooms1.csv' file not found. Please ensure it exists in the same directory as this app.")
+        return pd.DataFrame()
 
 showroom_df = load_showroom_data()
 
+# === UI Styling ===
 st.markdown("""
     <style>
     .stApp {
@@ -44,7 +50,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Page 1: Input Form
+# === Page 1: Input Form ===
 if st.session_state.page == 'home':
     st.markdown("<h1 style='text-align: center;'>🚘 AI Vehicle Recommendation System</h1>", unsafe_allow_html=True)
 
@@ -68,13 +74,13 @@ if st.session_state.page == 'home':
 
             with st.spinner("Fetching recommendations..."):
                 try:
-                    response = requests.post("https://ai-based-vehicle.onrender.com", json=payload)
+                    response = requests.post("https://ai-based-vehicle.onrender.com/recommend", json=payload)
                     st.session_state.recommendations = response.json()
                     st.session_state.page = 'recommendations'
                 except Exception as e:
                     st.error(f"Backend error: {e}")
 
-# Page 2: Recommendations
+# === Page 2: Recommendations ===
 elif st.session_state.page == 'recommendations':
     st.title("Recommended Vehicles")
 
@@ -119,7 +125,7 @@ elif st.session_state.page == 'recommendations':
         if st.button("Back"):
             st.session_state.page = 'home'
 
-# Page 3: Showroom Page
+# === Page 3: Showroom Info ===
 elif st.session_state.page == 'showrooms':
     st.title("Available Showrooms for Recommended Vehicles")
 
