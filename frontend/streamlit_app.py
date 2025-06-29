@@ -20,9 +20,7 @@ def load_showroom_data():
         df = pd.read_csv("showrooms1.csv", sep=",", quotechar='"', engine='python', on_bad_lines='skip')
         df.columns = df.columns.str.strip().str.replace('\n', '').str.replace('\r', '').str.replace('"', '')
         return df
-    except FileNotFoundError:
-        st.error("⚠️ 'showrooms1.csv' file not found. Please ensure it exists in the same directory as this app.")
-        return pd.DataFrame()
+
 
 showroom_df = load_showroom_data()
 
