@@ -15,7 +15,7 @@ if 'vehicle_type' not in st.session_state:
 
 @st.cache_data
 def load_showroom_data():
-    df = pd.read_csv("data1/showrooms1.csv", sep=",", quotechar='"', engine='python', on_bad_lines='skip')
+    df = pd.read_csv("frontend/data1/showrooms1.csv", sep=",", quotechar='"', engine='python', on_bad_lines='skip')
     df.columns = df.columns.str.strip().str.replace('\n', '').str.replace('\r', '').str.replace('"', '')
     return df
 
