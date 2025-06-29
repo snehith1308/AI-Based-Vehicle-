@@ -15,7 +15,7 @@ if 'vehicle_type' not in st.session_state:
 
 @st.cache_data
 def load_showroom_data():
-    df = pd.read_csv("showrooms1.csv", sep=",", quotechar='"', engine='python', on_bad_lines='skip')
+    df = pd.read_csv("data1/showrooms1.csv", sep=",", quotechar='"', engine='python', on_bad_lines='skip')
     df.columns = df.columns.str.strip().str.replace('\n', '').str.replace('\r', '').str.replace('"', '')
     return df
 
@@ -68,7 +68,7 @@ if st.session_state.page == 'home':
 
             with st.spinner("Fetching recommendations..."):
                 try:
-                    response = requests.post("http://localhost:5000/recommend", json=payload)
+                    response = requests.post("https://ai-based-vehicle.onrender.com", json=payload)
                     st.session_state.recommendations = response.json()
                     st.session_state.page = 'recommendations'
                 except Exception as e:
