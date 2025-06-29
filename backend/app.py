@@ -10,8 +10,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Load data
-vehicle_df = pd.read_csv("updated_expanded_vehicle.csv")
-car_df = pd.read_csv("updated_expanded_car.csv")
+vehicle_df = pd.read_csv("data/updated_expanded_vehicle.csv")
+car_df = pd.read_csv("data/updated_expanded_car.csv")
 
 # Preprocess mileage
 vehicle_df["Mileage"] = vehicle_df["Mileage"].apply(lambda x: float(re.sub(r"[^0-9.]", "", str(x))) if pd.notna(x) else 0)
